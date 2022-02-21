@@ -1,0 +1,7 @@
+{
+  "/v1/payments/instant-sepa-credit-transfers": {
+      "target": "http://localhost:20014",
+      "secure": false,
+      "logLevel": "debug"
+  }
+}
