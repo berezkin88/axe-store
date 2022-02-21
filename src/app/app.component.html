@@ -8,7 +8,8 @@
       <h5 class="card-title">Gucci Axe</h5>
       <p class="card-text">Very elegant luxury Lumber Axe</p>
       <p class="card-text">Price: EUR 3000</p>
-      <button class="btn btn-primary" (click)="buyAxe()">Buy one</button>
+      <input type="text" name="iban" id="iban" placeholder="IBAN" style="margin-bottom: 1rem; width: 100%;" #iban>
+      <button class="btn btn-primary" (click)="buyAxe(iban.value)">Buy one</button>
     </div>
   </div>
 </div>

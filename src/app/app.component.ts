@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,38 +21,40 @@ export class AppComponent {
     }
   };
 
-  body = {
-    endToEndIdentification: 'WBG-123456789',
-    debtorAccount: {
-      currency: 'EUR',
-      iban: 'DE74908215670000000101'
-    },
-    instructedAmount: {
-      currency: 'EUR',
-      amount: '0.01'
-    },
-    creditorAccount: {
-      currency: 'EUR',
-      iban: 'DE04908215670000000100'
-    },
-    creditorAgent: 'AAAADEBBXXX',
-    creditorName: 'Frog',
-    creditorAddress: {
-      buildingNumber: '11',
-      townName: 'Berlin',
-      country: 'DE',
-      postCode: '10001',
-      streetName: 'Straße'
-    },
-    remittanceInformationUnstructured: 'Remittance String'
-  };
-
   constructor(private http: HttpClient) { }
 
-  buyAxe(): void {
-    this.http.post(this.url, this.body, this.options)
+  buyAxe(iban: string): void {
+    this.http.post(this.url, this.getModel(iban), this.options)
       .subscribe(response => console.log(response));
 
     console.log('Axe bought');
+  }
+
+  private getModel(ibanValue: string): any {
+    return {
+      endToEndIdentification: 'WBG-123456789',
+      debtorAccount: {
+        currency: 'EUR',
+        iban: ibanValue
+      },
+      instructedAmount: {
+        currency: 'EUR',
+        amount: '3000.0'
+      },
+      creditorAccount: {
+        currency: 'EUR',
+        iban: 'DE04908215670000000100'
+      },
+      creditorAgent: 'AAAADEBBXXX',
+      creditorName: 'Frog',
+      creditorAddress: {
+        buildingNumber: '11',
+        townName: 'Berlin',
+        country: 'DE',
+        postCode: '10001',
+        streetName: 'Straße'
+      },
+      remittanceInformationUnstructured: 'Remittance String'
+    };
   }
 }
