@@ -1,13 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+  subscription: Subscription;
+
   url = '/v1/payments/instant-sepa-credit-transfers';
   options = {
     headers: {
@@ -24,8 +27,11 @@ export class AppComponent {
   constructor(private http: HttpClient) { }
 
   buyAxe(iban: string): void {
-    this.http.post(this.url, this.getModel(iban), this.options)
-      .subscribe(response => console.log(response));
+    this.subscription = this.http.post<{_links: any}>(this.url, this.getModel(iban), this.options)
+      .subscribe(response => {
+        console.log(response);
+        window.location.href = response._links.scaRedirect.href;
+      });
 
     console.log('Axe bought');
   }
@@ -56,5 +62,11 @@ export class AppComponent {
       },
       remittanceInformationUnstructured: 'Remittance String'
     };
+  }
+
+  ngOnDestroy(): void {
+    console.log('unsubscribed');
+
+    this.subscription.unsubscribe();
   }
 }
